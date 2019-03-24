@@ -26,6 +26,15 @@
 </head>
 
 <body>
+     <script type="text/javascript">
+    const node = new Ipfs({ repo: 'ipfs-' + Math.random() })
+    node.once('ready', () => {
+      console.log('Online status: ', node.isOnline() ? 'online' : 'offline')
+      
+      // You can write more code here to use it. Use methods like
+      // node.add, node.get. See the API docs here:
+      // https://github.com/ipfs/interface-ipfs-core
+    })</script>
 
     <ul class="nav nav-tabs navbar-inverse">
         <li><a href="./indexCustomer.html">Back</a></li>
@@ -34,6 +43,7 @@
 
 
     </ul>
+
 
     <div class="tab-content">
         <div id="form1" class="tab-pane fade in active">
@@ -242,7 +252,7 @@
                         } else {
                             var web3 = new Web3();
                         }
-                        const ipfsAPI = new window.Ipfs();
+                        
                     
                     </script>
                     <script language="JavaScript" type="text/javascript" src="./js/contractDetails.js"></script>

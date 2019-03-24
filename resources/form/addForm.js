@@ -9,7 +9,7 @@ var deployedContract = kycContract.new({
     gas: 4700000
 });
 var contractInstance = kycContract.at(contractAddress);
- var init=false;
+
 
 var current_account = localStorage.bank_eth_account.toString();
 
@@ -42,14 +42,16 @@ var current_account = localStorage.bank_eth_account.toString();
 
 //  function to create a new KYC profile
 
-function onClickAdd(Data) {
+function onClickAdd() {
     
 
-    //var Data = getInfo();
+    var Data = getInfo();
     
 
 
     var usnm = document.getElementById("username").value;
+     localStorage.user_name_m=usnm;
+     localStorage.data=Data;
     if (Data == undefined || usnm == "") {
         alert("Valid details required!");
         window.location = '../bankHomePage.html';
@@ -75,6 +77,8 @@ function onClickAdd(Data) {
         window.location = '../bankHomePage.html';
         return false;
     } else {
+        
+        
         contractInstance.addCustomer.sendTransaction(usnm, Data, {
             from: current_account.toString(),
             gas: 4700000
@@ -84,34 +88,34 @@ function onClickAdd(Data) {
         return false;
     }
 }
-function getIpfs() {
+function getIpfs(node) {
     
     // body...
     var data=getInfo();
-    console.log(data);
+
+    console.log(node);
     
-    node.once('ready', () => {
     
-       node.add(new node.types.Buffer(getInfo()), (err,filesAdded) => {
+       node.add(node.types.Buffer(getInfo()), (err,filesAdded) => {
       if (err) {
         return console.error('Error - ipfs add', err)
 
       }
       filesAdded.forEach((file) => console.log (file.hash));
       console.log(filesAdded[0]['hash']);
-
+      return (filesAdded[0]['hash']);
       
-      return onClickAdd(filesAdded[0]['hash'])
+      
       
     });
       
       // You can write more code here to use it. Use methods like
       // node.add, node.get. See the API docs here:
-    });  // https://github.com/ipfs/interface-ipfs-core
+     // https://github.com/ipfs/interface-ipfs-core
     
 
      
-    
+    return data;
     
 
 }
@@ -130,7 +134,7 @@ function getIpfs() {
     data = data + "!@#" + document.getElementById("address").value + "!@#" + document.getElementById("phone_1").value + "!@#" + document.getElementById("phone_2").value + "!@#" + document.getElementById("email").value + "!@#" + document.getElementById("country_res").value + "!@#";
     
     // Connect to IPFS
-    console.log(data);
+    
 
       
     

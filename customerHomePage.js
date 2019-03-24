@@ -15,16 +15,26 @@ var contractInstance = kycContract.at(contractAddress);
 
 var current_account = web3.eth.accounts[0];
 var user_name = localStorage.username_c;
-const ipfs = require('ipfs-api');
 
+var oldData = contractInstance.viewCustomer.call(user_name, {
+        from: current_account,
+        gas: 4700000
+    });
+    node.once('ready', () => {
+
+    node.cat(oldData, function (err, data) {
+      if (err) {
+        return console.error('Error - ipfs files cat', err)
+      }
+      oldData=data.toString();
+      console.log(oldData);
+      fillForm();
+    });});
 //  function to fill customer data in form
 
 function fillForm() {
     //  alert(user_name);
-    var oldData = contractInstance.viewCustomer.call(user_name, {
-        from: current_account,
-        gas: 4700000
-    });
+
     //  alert(oldData);
     document.getElementById("customer_rating").innerHTML = contractInstance.getCustomerRating.call(user_name, {
         from: current_account,
@@ -63,7 +73,7 @@ function fillForm() {
 
 //  fill the KYC form
 
-fillForm();
+
 var arr = [];
 
 function what() {

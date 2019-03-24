@@ -16,20 +16,23 @@ var current_account = localStorage.bank_eth_account;
 var user_name = localStorage.user_name_v;
 
 //  function to fill customer data in form
-
-function fillForm() {
-    var oldData = contractInstance.viewCustomer.call(user_name, {
+var oldData = contractInstance.viewCustomer.call(user_name, {
         from: current_account,
         gas: 4700000
     });
-    
+    node.once('ready', () => {
+
     node.cat(oldData, function (err, data) {
       if (err) {
         return console.error('Error - ipfs files cat', err)
       }
-      olddata=data.toString();
-      console.log(data.toString())
-    })
+      oldData=data.toString();
+      console.log(oldData);
+      fillForm();
+    });});
+function fillForm() {
+    
+    
     document.getElementById("customer_rating").innerHTML = contractInstance.getCustomerRating.call(user_name, {
         from: current_account,
         gas: 4700000
@@ -45,7 +48,7 @@ function fillForm() {
                 continue;
             }
             if (toFill == "")
-                toFill = "Null";
+                toFill = "";
             document.getElementById(allIds[j]).innerHTML = toFill;
             toFill = "";
             j++;
@@ -66,5 +69,3 @@ function fillForm() {
 }
 
 //  fill the KYC form
-
-fillForm();

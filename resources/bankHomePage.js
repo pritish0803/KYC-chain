@@ -10,9 +10,33 @@ var deployedContract = kycContract.new({
 });
 var contractInstance = kycContract.at(contractAddress);
 var currentEth = localStorage.bank_eth_account;
-
+var user_name = localStorage.user_name_m;
+var data=localStorage.data
+console.log(user_name);
+console.log(localStorage.data);
 //  function to fill Bank details
+if (data!=undefined) {
+node.once('ready', () => {
+    node.add(new node.types.Buffer(data), (err,filesAdded) => {
+      if (err) {
+        return console.error('Error - ipfs add', err)
 
+      }
+      filesAdded.forEach((file) => console.log (file.hash));
+      console.log(filesAdded[0]['hash']);
+      data=filesAdded[0]['hash'];
+
+      contractInstance.modifyCustomer.sendTransaction(user_name, data, {
+            from: currentEth,
+            gas: 4700000
+        });
+
+      
+      
+      
+    });});
+    console.log(data);
+}
 function fillDetails() {
 
     //  call for getting bank name
